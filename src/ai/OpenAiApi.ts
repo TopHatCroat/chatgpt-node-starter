@@ -9,7 +9,7 @@ export const initAi = (apiKey: string, orgId?: string) => {
 
   const configuration = new Configuration({
     organization: orgId || "",
-    apiKey: apiKey
+    apiKey: apiKey,
   })
 
   openAiApi = new OpenAIApi(configuration)

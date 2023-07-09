@@ -9,6 +9,8 @@ The following scripts are available in the `package.json`:
 - `dev`: Starts the development server
 - `build`: Builds the app for production
 - `start`: Runs the production server
+- `prettier`: Runs prettier to check for formatting issues
+- `prettier:fix`: Runs prettier to fix formatting issues
 
 ## How to Use
 
@@ -17,6 +19,7 @@ The following scripts are available in the `package.json`:
 ## Environment Variables
 
 The following environment variables are available to use:
+
 ```shell
 # Application port
 PORT=3000
@@ -25,4 +28,3 @@ OPENAI_API_KEY=YOUR_API_KEY
 # OpenAI Organization ID
 OPENAI_ORG_ID=YOUR_ORG_ID
 ```
-
