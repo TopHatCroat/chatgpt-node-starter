@@ -4,13 +4,14 @@
     "lib": [
       "esnext"
     ],
+    "moduleResolution": "NodeNext",
     "allowJs": false,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src"
