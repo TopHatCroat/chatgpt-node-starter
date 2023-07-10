@@ -22,10 +22,13 @@ const start = async () => {
 
   console.log(`Server listening on port ${port}`)
 
-  initAi(process.env.OPENAI_API_KEY, process.env.OPENAI_ORG_ID)
+  const initOptions = {
+    apiKey: process.env.OPENAI_API_KEY,
+    orgId: process.env.OPENAI_ORG_ID,
+    model: process.env.OPENAI_MODEL || "davinci",
+  }
 
-  const models = await listModels()
-  console.log(models)
+  initAi(initOptions)
 }
 
 start()
