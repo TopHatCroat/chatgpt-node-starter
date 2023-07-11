@@ -10,10 +10,17 @@ interface InitAiOptions {
 }
 
 export interface Ai {
-  chat(prompt: string): Promise<String>;
+  chat(prompt: string): Promise<AiChatResponse | AiErrorResponse>;
 }
 
 let model: string = ""
+
+function parseError(e: any): AiErrorResponse {
+  return {
+    message: e.response.statusText || "Unknown error",
+    statusCode: e.response.status || 500,
+  }
+}
 
 export const initAi = async (options: InitAiOptions): Promise<Ai> => {
   if (openAiApi !== null) {
@@ -38,7 +45,7 @@ export const initAi = async (options: InitAiOptions): Promise<Ai> => {
   }
 
   return {
-    chat: async (prompt: string): Promise<string> => {
+    chat: async (prompt: string): Promise<AiChatResponse | AiErrorResponse> => {
       if (openAiApi === null) {
         throw new Error("OpenAI API not initialized")
       }
@@ -58,10 +65,14 @@ export const initAi = async (options: InitAiOptions): Promise<Ai> => {
           stop: ["\n", " Human:", " AI:"],
         })
 
-        return response.data.choices[0].message?.content || ""
-      } catch (e) {
+        console.log(response.data)
+
+        return {
+          response: response.data.choices[0].message?.content || ""
+        }
+      } catch (e: any) {
         console.log(e)
-        return ""
+        return parseError(e)
       }
 
     }
