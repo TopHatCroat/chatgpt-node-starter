@@ -2,10 +2,10 @@ import { Configuration, Model, OpenAIApi } from "openai"
 
 let openAiApi: OpenAIApi | null = null
 
+// Open AI options
 interface InitAiOptions {
   apiKey: string;
   orgId?: string;
-  // Open AI options
   model: string;
 }
 

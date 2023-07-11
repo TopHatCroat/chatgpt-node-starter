@@ -1,6 +1,6 @@
-# backend
+# Chat GPT Node Starter
 
-This project was created using create-payload-app using the blog template.
+This project is intended to help you start building a OpenAI powered chatbot using Node.js.
 
 ## 📃 Scripts Overview
 
@@ -30,3 +30,9 @@ OPENAI_ORG_ID=YOUR_ORG_ID
 # OpenAI Model ID
 OPENAI_MODEL_ID=YOUR_MODEL_ID
 ```
+
+## FAQ
+
+> I'm getting a 429 error when I try to make a request
+
+As of right now, the OpenAI API requires you to have a paid account to make requests. You can sign up for one [here](https://platform.openai.com/account/billing/overview).
