@@ -1,26 +1,16 @@
-import express from "express"
+import express, { Request, Response } from "express"
 import { initAi, listModels } from "./ai/OpenAiApi"
+import { initEndpoints } from "./api/Controller"
 
 require("dotenv").config({ debug: process.env.NODE_ENV !== "production" })
 const app = express()
 
 const start = async () => {
-  // TODO: initialise
-
   // TODO: create fixtures
-
-  // TODO: create endpoints
-
-  // Add your own express routes here
 
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY not set")
   }
-
-  const port = process.env.PORT || 3000
-  app.listen(port)
-
-  console.log(`Server listening on port ${port}`)
 
   const initOptions = {
     apiKey: process.env.OPENAI_API_KEY,
@@ -28,7 +18,14 @@ const start = async () => {
     model: process.env.OPENAI_MODEL || "davinci",
   }
 
-  initAi(initOptions)
+  const ai = await initAi(initOptions)
+
+  initEndpoints(app, ai)
+
+  const port = process.env.PORT || 3000
+  app.listen(port)
+
+  console.log(`Server listening on port ${port}`)
 }
 
 start()

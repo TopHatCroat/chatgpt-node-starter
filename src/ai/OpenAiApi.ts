@@ -9,9 +9,13 @@ interface InitAiOptions {
   model: string;
 }
 
+export interface Ai {
+  chat(prompt: string): Promise<String>;
+}
+
 let model: string = ""
 
-export const initAi = async (options: InitAiOptions) => {
+export const initAi = async (options: InitAiOptions): Promise<Ai> => {
   if (openAiApi !== null) {
     throw new Error("OpenAI API already initialized")
   }
@@ -31,6 +35,36 @@ export const initAi = async (options: InitAiOptions) => {
   } else {
     console.log(`Using model ${chosenModel.id}`)
     model = chosenModel.id
+  }
+
+  return {
+    chat: async (prompt: string): Promise<string> => {
+      if (openAiApi === null) {
+        throw new Error("OpenAI API not initialized")
+      }
+
+      try {
+        const response = await openAiApi.createChatCompletion({
+          messages: [{
+            role: "user",
+            content: prompt,
+          }],
+          model,
+          max_tokens: 150,
+          temperature: 0.9,
+          top_p: 1,
+          presence_penalty: 0.6,
+          frequency_penalty: 0.0,
+          stop: ["\n", " Human:", " AI:"],
+        })
+
+        return response.data.choices[0].message?.content || ""
+      } catch (e) {
+        console.log(e)
+        return ""
+      }
+
+    }
   }
 }
 
