@@ -1,4 +1,5 @@
 import { Configuration, Model, OpenAIApi } from "openai"
+import { ChatCompletionRequestMessage } from "openai/api"
 
 let openAiApi: OpenAIApi | null = null
 
@@ -10,7 +11,7 @@ interface InitAiOptions {
 }
 
 export interface Ai {
-  chat(prompt: string): Promise<AiChatResponse | AiErrorResponse>;
+  chat(userPrompt: string, systemPrompt?: string | null): Promise<AiChatResponse | AiErrorResponse>;
 }
 
 let model: string = ""
@@ -45,24 +46,31 @@ export const initAi = async (options: InitAiOptions): Promise<Ai> => {
   }
 
   return {
-    chat: async (prompt: string): Promise<AiChatResponse | AiErrorResponse> => {
+    chat: async (userPrompt, systemPrompt): Promise<AiChatResponse | AiErrorResponse> => {
       if (openAiApi === null) {
         throw new Error("OpenAI API not initialized")
       }
 
+      const messages: Array<ChatCompletionRequestMessage> = [{
+        role: "user",
+        content: userPrompt,
+      }]
+
+      if (systemPrompt) {
+        messages.push({
+          role: "system",
+          content: systemPrompt,
+        })
+      }
+
       try {
         const response = await openAiApi.createChatCompletion({
-          messages: [{
-            role: "user",
-            content: prompt,
-          }],
+          messages,
           model,
-          max_tokens: 150,
+          max_tokens: 500,
           temperature: 0.9,
-          top_p: 1,
           presence_penalty: 0.6,
-          frequency_penalty: 0.0,
-          stop: ["\n", " Human:", " AI:"],
+          frequency_penalty: 0.0
         })
 
         console.log(response.data)
